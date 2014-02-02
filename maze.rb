@@ -6,12 +6,15 @@ class Maze
 	def initialize(wide, high, binary = String.new)
 		@wide = wide * 2 + 1
 		@high = high * 2 + 1
-		@binary = binary
+		@binary = binary.to_s
 	end
 
-		def coordinate(x, y)
+	def value
+		return @binary
+	end
+
+	def coordinate(x, y)
 		# translate logical coordinates to string position
-		# set a min and max value for coordinates according to open spaces
 		x = (x <= (@wide)) ? x : @wide
 		x = (x >= 1) ? x : 1
 		y = (y <= (@high)) ? y : @high
@@ -21,23 +24,23 @@ class Maze
 
 	def get_x(num)
 		x = (num + 1) % @wide
-		x = (x==0) ? 7 : x
+		x = (x==0) ? @wide : x
 		return x
 	end
 	def get_y(num)
 		return @high - (num) / @wide
 	end
-	def left(x,y)
-		return coordinate(x-1,y)
+	def left(num)
+		return coordinate(get_x(num)-1,get_y(num))
 	end
-	def right(x,y)
-		return coordinate(x+1,y)
+	def right(num)
+		return coordinate(get_x(num)+1,get_y(num))
 	end
-	def up(x,y)
-		return coordinate(x,y+1)
+	def up(num)
+		return coordinate(get_x(num),get_y(num)+1)
 	end
-	def down(x,y)
-		return coordinate(x,y-1)
+	def down(num)
+		return coordinate(get_x(num),get_y(num)-1)
 	end
 
 	def generate
@@ -52,32 +55,37 @@ class Maze
 		end
 		return @binary
 	end
+
+	def set(char, val)
+		@binary[char] = val
+	end
 	
 	def print(input=@binary)
+		# output maze in 2 dimensions
 		(1..@high).each do |line|
 			puts input[((line-1)*@wide)..((line)*@wide-1)]
 		end
 	end
 
 	def visualize
+		# process the maze string into graphical form
 		visual = String.new(@binary)
 		(0..((@wide)*(@high)-1)).each do |char|
-
 			if @binary[char].to_s == "0"
 				visual[char] = " "
 			else
-				x = get_x(char)
-				y = get_y(char)
-				neighbors = @binary[left(x,y)].to_i+@binary[right(x,y)].to_i+@binary[up(x,y)].to_i+@binary[down(x,y)].to_i
-				neighbors = @binary[left(char)].to_i+@binary[right(char)].to_i+@binary[up(char)].to_i+@binary[down(char)].to_i
-				if neighbors >= 4
+				horiz = @binary[left(char)].to_i+@binary[right(char)].to_i
+				vert = @binary[up(char)].to_i+@binary[down(char)].to_i
+				if horiz+vert >= 4
 					visual[char] = "+"
-				elsif ((@binary[left(x,y)].to_i + @binary[right(x,y)].to_i) >= 2)
+				elsif horiz == 2 || vert == 0
 					visual[char] = "-"
-				else
+				elsif vert == 2 || horiz == 0 
 					visual[char] = "|"
+				else
+					visual[char] = "+"
 				end
-				#puts char.to_s + " is at position (" + x.to_s + ", " + y.to_s + "). left-right-up-down: " + @binary[left(x,y)]+" "+@binary[right(x,y)]+" "+@binary[up(x,y)]+" "+@binary[down(x,y)]
+				#puts char.to_s + " is at position (" + get_x(char).to_s + ", " + get_y(char).to_s + "). left-right-up-down: " + @binary[left(char)]+" "+@binary[right(char)]+" "+@binary[up(char)]+" "+@binary[down(char)]
 			end
 		end
 		return visual
@@ -85,12 +93,12 @@ class Maze
 
 end
 
-maze = Maze.new(4,5)
-maze.generate
-maze.print
-puts ""
-maze.print(maze.visualize)
-puts ""
+#maze = Maze.new(4,4,111111111100010001111010101100010101101110101100000101111011101100000101111111111)
+#maze.generate
+#maze.print
+#puts ""
+#maze.print(maze.visualize)
+#puts ""
 
 
 
