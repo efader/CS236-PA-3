@@ -13,6 +13,10 @@ class Maze
 		return @binary
 	end
 
+	def udlr(cell)
+		return [up(cell), down(cell), left(cell), right(cell)]
+	end
+
 	def coordinate(x, y)
 		# translate logical coordinates to string position
 		x = (x <= (@wide)) ? x : @wide
@@ -50,7 +54,7 @@ class Maze
 		end
 		(1..((@wide - 1)/ 2)).each do |w|
 			(1..((@high - 1)/ 2)).each do |h|
-				@binary[coordinate(w*2,h*2)] = "0"
+				set(coordinate(w*2,h*2), "0")
 			end
 		end
 		return @binary
@@ -58,6 +62,10 @@ class Maze
 
 	def set(char, val)
 		@binary[char] = val
+	end
+
+	def get(char)
+		return @binary[char].to_s
 	end
 	
 	def print(input=@binary)
@@ -71,11 +79,11 @@ class Maze
 		# process the maze string into graphical form
 		visual = String.new(@binary)
 		(0..((@wide)*(@high)-1)).each do |char|
-			if @binary[char].to_s == "0"
+			if get(char) == "0"
 				visual[char] = " "
 			else
-				horiz = @binary[left(char)].to_i+@binary[right(char)].to_i
-				vert = @binary[up(char)].to_i+@binary[down(char)].to_i
+				horiz = get(left(char)).to_i+get(right(char)).to_i
+				vert = get(up(char)).to_i+get(down(char)).to_i
 				if horiz+vert >= 4
 					visual[char] = "+"
 				elsif horiz == 2 || vert == 0
@@ -85,7 +93,7 @@ class Maze
 				else
 					visual[char] = "+"
 				end
-				#puts char.to_s + " is at position (" + get_x(char).to_s + ", " + get_y(char).to_s + "). left-right-up-down: " + @binary[left(char)]+" "+@binary[right(char)]+" "+@binary[up(char)]+" "+@binary[down(char)]
+				#puts char.to_s + " is at position (" + get_x(char).to_s + ", " + get_y(char).to_s + "). left-right-up-down: " + get(left(char))+" "+get(right(char))+" "+get(up(char))+" "+get(down(char))
 			end
 		end
 		return visual
