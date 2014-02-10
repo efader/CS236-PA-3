@@ -11,14 +11,15 @@ class Solver
 	end
 
 	def trace(start_x,start_y,finish_x,finish_y)
-		@map = Maze.new(@maze.width, @maze.height, @maze.value)
+		# make a copy of the maze to mark up
+		@map = Maze.new(@maze.width, @maze.height, String.new(@maze.value))
 
 		start = @maze.coordinate(start_x*2,start_y*2)
 		finish = @maze.coordinate(finish_x*2,finish_y*2)
-
+		# call a recursive function to process the copy of the maze
+		@current_solution = trace_recursive(start,finish)
 		@map = Maze.new(@maze.width, @maze.height, @maze.value)
 
-		@current_solution = trace_recursive(start,finish)
 		return @current_solution
 		
 	end
@@ -36,41 +37,41 @@ class Solver
 		udlr.each do |next_cell|
 			if @map.get(next_cell) == "0"
 				next_path = trace_recursive(next_cell,finish)
-				#puts next_path.to_s + " tracing " + next_cell.to_s
 				if !!next_path
 					# if a path is returning a string instead of nil, return an appended string
 					return path + " " + next_path
 				end
 			end
 		end
-		return nil
-			
+		return nil		
 	end
 
 	def solution
+		# list logical coordinates for how to solve the maze
 		solution = String.new
 		@current_solution.split.each do |step|
-			x = @maze.get_x(step)
-			y = @maze.get_y(step)
+			x = @maze.get_x(step.to_i)
+			y = @maze.get_y(step.to_i)
 			if (x % 2 == 0) && (y % 2 == 0)
-				solution = solution + "(" + (x / 2).to_s + "," + (y / 2).to_s + ") "
+				solution = solution + "(" + (x / 2).to_s + "," + (y / 2).to_s + ")>"
 			end
 		end
-
+		return solution
 	end
 
-	def print_solution
+	def visual_solution
+		# Draw the path that trace generated onto the visualization of the maze
 		visual = String.new(@maze.visualize)
 		@current_solution.split.each do |step|
 			visual[step.to_i] = "*"
 		end
-		return @maze.print(visual)
+		return visual
 	end
 end
 
 maze = Maze.new(4,4,111111111100010001111010101100010101101110101100000101111011101100000101111111111)
+maze.print(maze.visualize)
 solver = Solver.new(maze)
-puts solver.solve(1,4,4,1)
-solver.print_solution
+puts solver.solve(4,1,1,4)
+maze.print(solver.visual_solution)
 puts solver.solution
-

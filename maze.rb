@@ -25,6 +25,10 @@ class Maze
 		return [up(cell), down(cell), left(cell), right(cell)]
 	end
 
+	def uuddllrr(cell)
+		return [up(up(cell)), down(down(cell)), left(left(cell)), right(right(cell))]
+	end
+
 	def coordinate(x, y)
 		# translate logical coordinates to string position
 		x = (x <= (@wide)) ? x : @wide
@@ -39,34 +43,26 @@ class Maze
 		x = (x==0) ? @wide : x
 		return x
 	end
+
 	def get_y(num)
 		return @high - (num) / @wide
 	end
+
 	def left(num)
 		return coordinate(get_x(num)-1,get_y(num))
 	end
+
 	def right(num)
 		return coordinate(get_x(num)+1,get_y(num))
 	end
+
 	def up(num)
 		return coordinate(get_x(num),get_y(num)+1)
 	end
+
 	def down(num)
 		return coordinate(get_x(num),get_y(num)-1)
 	end
-
-#	def generate
-#		@binary = ""
-#		(1..@wide*@high).each do |char|
-#			@binary += "1"
-#		end
-#		(1..((@wide - 1)/ 2)).each do |w|
-#			(1..((@high - 1)/ 2)).each do |h|
-#				set(coordinate(w*2,h*2), "0")
-#			end
-#		end
-#		return @binary
-#	end
 
 	def set(char, val)
 		@binary[char] = val
@@ -90,8 +86,8 @@ class Maze
 			if get(char) == "0"
 				visual[char] = " "
 			else
-				horiz = get(left(char)).to_i+get(right(char)).to_i
-				vert = get(up(char)).to_i+get(down(char)).to_i
+				horiz = get(left(char)).to_i + get(right(char)).to_i
+				vert = get(up(char)).to_i + get(down(char)).to_i
 				if horiz+vert >= 4
 					visual[char] = "+"
 				elsif horiz == 2 || vert == 0
@@ -101,7 +97,6 @@ class Maze
 				else
 					visual[char] = "+"
 				end
-				#puts char.to_s + " is at position (" + get_x(char).to_s + ", " + get_y(char).to_s + "). left-right-up-down: " + get(left(char))+" "+get(right(char))+" "+get(up(char))+" "+get(down(char))
 			end
 		end
 		return visual
