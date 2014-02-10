@@ -55,18 +55,18 @@ class Maze
 		return coordinate(get_x(num),get_y(num)-1)
 	end
 
-	def generate
-		@binary = ""
-		(1..@wide*@high).each do |char|
-			@binary += "1"
-		end
-		(1..((@wide - 1)/ 2)).each do |w|
-			(1..((@high - 1)/ 2)).each do |h|
-				set(coordinate(w*2,h*2), "0")
-			end
-		end
-		return @binary
-	end
+#	def generate
+#		@binary = ""
+#		(1..@wide*@high).each do |char|
+#			@binary += "1"
+#		end
+#		(1..((@wide - 1)/ 2)).each do |w|
+#			(1..((@high - 1)/ 2)).each do |h|
+#				set(coordinate(w*2,h*2), "0")
+#			end
+#		end
+#		return @binary
+#	end
 
 	def set(char, val)
 		@binary[char] = val
