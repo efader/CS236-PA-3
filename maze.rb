@@ -6,11 +6,19 @@ class Maze
 	def initialize(wide, high, binary = String.new)
 		@wide = wide * 2 + 1
 		@high = high * 2 + 1
-		@binary = binary.to_s
+		@binary = String.new(binary.to_s)
 	end
 
 	def value
 		return @binary
+	end
+
+	def width
+		return (@wide - 1) / 2
+	end
+
+	def height
+		return (@high - 1) / 2
 	end
 
 	def udlr(cell)
