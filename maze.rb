@@ -3,10 +3,10 @@ class Maze
 	# this describes a square of spaces that are all open
 	# these open spaces can have either walls or paths to other
 	# open
-	def initialize(wide, high, binary = String.new)
+	def initialize(wide=1, high=1, binary = "X")
 		@wide = wide * 2 + 1
 		@high = high * 2 + 1
-		@binary = String.new(binary.to_s)
+		@binary = binary == "X" ? "0" * @wide * @high : String.new(binary.to_s)
 	end
 
 	def value
@@ -90,10 +90,10 @@ class Maze
 				vert = get(up(char)).to_i + get(down(char)).to_i
 				if horiz+vert >= 4
 					visual[char] = "+"
-				elsif horiz == 2 || vert == 0
-					visual[char] = "-"
-				elsif vert == 2 || horiz == 0 
+				elsif  (vert == 2 && horiz == 0) || get_x(char) == 1 || get_x(char)== @wide
 					visual[char] = "|"
+				elsif (horiz == 2 && vert == 0) || get_y(char) == 1 || get_y(char)== @high
+					visual[char] = "-"
 				else
 					visual[char] = "+"
 				end
