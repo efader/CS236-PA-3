@@ -132,13 +132,13 @@ gen = Generator.new(4,4)
 puts############
 maze.redesign
 maze.print(maze.visualize)
-puts############
 maze = Maze.new(30,10)
 maze.redesign
 puts############
 maze.print(maze.visualize)
 s = Solver.new(maze)
 s.trace(1,1,30,10)
+puts############
 s.print
 
 

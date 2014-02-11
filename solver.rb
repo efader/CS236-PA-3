@@ -35,7 +35,7 @@ class Solver
 		udlr.each do |next_str_pos|
 			if @map.get(next_str_pos) == "0"
 				next_path = trace_recursive(next_str_pos,finish)
-				if !!next_path
+				if !next_path.nil?
 					# if a path is returning a string instead of nil, return an appended string
 					return path + " " + next_path
 				end

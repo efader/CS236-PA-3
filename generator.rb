@@ -2,9 +2,9 @@ class Generator
 
 	def initialize(wide,high)
 		# Generators use actual coordinates and string positions, never logical coordinates
+		@maze = Maze.new(wide,high)
 		@wide = wide * 2 + 1
 		@high = high * 2 + 1
-		@maze = Maze.new(wide,high)
 	end
 
 	def generate()
@@ -45,15 +45,16 @@ class Generator
 
 	def generate_blank
 		# make a grid of boxes for processing
-		(0..@wide*@high-1).each do |str_pos|
-			@maze.set(str_pos,"1")
-		end
+		flat_string = "1" * (@wide*@high)
+
 		(1..((@wide - 1)/ 2)).each do |w|
 			(1..((@high - 1)/ 2)).each do |h|
-				@maze.set(@maze.coordinate(w*2,h*2), "X")
+				flat_string[@maze.coordinate(w*2,h*2)] = "X"
 			end
 		end
-		return @maze.value
+
+		@maze = Maze.new(@maze.width, @maze.height, flat_string)
+		return flat_string
 	end
 
 end
