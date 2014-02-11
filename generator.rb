@@ -1,6 +1,7 @@
 class Generator
 
 	def initialize(wide,high)
+		# Generators use actual coordinates and string positions, never logical coordinates
 		@wide = wide * 2 + 1
 		@high = high * 2 + 1
 		@maze = Maze.new(wide,high)
@@ -11,8 +12,8 @@ class Generator
 		w = (@wide - 1) / 2
 		h = (@high - 1) / 2
 		str_pos = @maze.coordinate(rand(1..w)*2,rand(1..h)*2)
-		generate_blank
 
+		generate_blank
 		generate_recursive(str_pos)
 
 		return @maze
@@ -21,36 +22,29 @@ class Generator
 
 	def generate_recursive(str_pos)
 		@maze.set(str_pos,"0")
-		udlr = @maze.udlr(str_pos)
 		uuddllrr = @maze.uuddllrr(str_pos)
-
+		dirs = Array.new
 		done = true
-		uuddllrr.each do |box|
-			# make sure there is one valid path from current cell
-			done = done && @maze.get(box) != "X"
-		end
 
-		if done
-			# when there are no valid directions left for paths, pass false
-			return false
+		uuddllrr.each do |next_str_pos|
+			# make sure there is at least one valid path from current cell, add it to a list of valid directions
+			if @maze.get(next_str_pos) == "X"
+				done = false
+				dirs << uuddllrr.index(next_str_pos)
+			end
 		end
+		return if done
 
-		while @maze.get(uuddllrr[direction=rand(0..3)]) != "X"
-			# randomly select a valid direction for a path
-		end
-
-		@maze.set(udlr[direction],"0")
+		@maze.set(@maze.udlr(str_pos)[direction = dirs.sample],"0")
 		if !generate_recursive(uuddllrr[direction])
-			# when a recursive call has passed false, a path is created
-			# then it calls itself to create a second path
+			# when a recursive call has returned false, that path has finished
+			# start a new path from the last valid position
 			generate_recursive(str_pos)
 		end
-
-		
 	end
 
 	def generate_blank
-		# make a grid of boxes
+		# make a grid of boxes for processing
 		(0..@wide*@high-1).each do |str_pos|
 			@maze.set(str_pos,"1")
 		end
@@ -61,6 +55,5 @@ class Generator
 		end
 		return @maze.value
 	end
-
 
 end
