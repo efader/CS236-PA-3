@@ -22,19 +22,19 @@ class Solver
 		
 	end
 
-	def trace_recursive(cell, finish)
-		path = cell.to_s
-		if cell == finish
+	def trace_recursive(str_pos, finish)
+		path = str_pos.to_s
+		if str_pos == finish
 			# this triggers all traces along the correct path to return strings instead of nil
 			return path
 		end
-		@map.set(cell,"X")
+		@map.set(str_pos,"X")
 
-		udlr = @map.udlr(cell)
+		udlr = @map.udlr(str_pos)
 
-		udlr.each do |next_cell|
-			if @map.get(next_cell) == "0"
-				next_path = trace_recursive(next_cell,finish)
+		udlr.each do |next_str_pos|
+			if @map.get(next_str_pos) == "0"
+				next_path = trace_recursive(next_str_pos,finish)
 				if !!next_path
 					# if a path is returning a string instead of nil, return an appended string
 					return path + " " + next_path
@@ -57,12 +57,16 @@ class Solver
 		return solution
 	end
 
-	def visual_solution
+	def visualize
 		# Draw the path that trace generated onto the visualization of the maze
 		visual = String.new(@maze.visualize)
 		@current_solution.split.each do |step|
 			visual[step.to_i] = "*"
 		end
 		return visual
+	end
+
+	def print
+		@maze.print(visualize)
 	end
 end

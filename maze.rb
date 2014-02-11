@@ -2,38 +2,46 @@ require_relative "solver"
 require_relative "generator"
 
 class Maze
-	# mazes are defined by their width and height
-	# this describes a square of spaces that are all open
-	# these open spaces can have either walls or paths to other
-	# open
+	# The maze can be described in therms of logical coordinates, actual coordinates, and string position
+	# 	logical coordinates describe a users perception of the maze as a grid of cells
+	# 	actual coordinates include walls between logical cells
+	# 	string positions refer to characters in a flat string representation
+	# Most of the functions in the maze class deal with converting between these systems
 	def initialize(wide=1, high=1, binary = "X")
+		# logical dimensions are different than actual dimensions
 		@wide = wide * 2 + 1
 		@high = high * 2 + 1
+		# default to an empty string of the correct size
 		@binary = binary == "X" ? "0" * @wide * @high : String.new(binary.to_s)
 	end
 
 	def value
+		# return the flat string representation of the maze
 		return @binary
 	end
 
 	def width
+		# return logical width
 		return (@wide - 1) / 2
 	end
 
 	def height
+		# return logical height
 		return (@high - 1) / 2
 	end
 
-	def udlr(cell)
-		return [up(cell), down(cell), left(cell), right(cell)]
+	def udlr(str_pos)
+		# an array of steps in each direction
+		return [up(str_pos), down(str_pos), left(str_pos), right(str_pos)]
 	end
 
-	def uuddllrr(cell)
-		return [up(up(cell)), down(down(cell)), left(left(cell)), right(right(cell))]
+	def uuddllrr(str_pos)
+		# and array of double steps in each direction
+		return [up(up(str_pos)), down(down(str_pos)), left(left(str_pos)), right(right(str_pos))]
 	end
 
 	def coordinate(x, y)
-		# translate logical coordinates to string position
+		# translate actual coordinates to string position
 		x = (x <= (@wide)) ? x : @wide
 		x = (x >= 1) ? x : 1
 		y = (y <= (@high)) ? y : @high
@@ -41,38 +49,41 @@ class Maze
 		return (@wide) * (@high - y) + x - 1
 	end
 
-	def get_x(num)
-		x = (num + 1) % @wide
+	def get_x(str_pos)
+		# get the actual x coordinate for a given string position
+		x = (str_pos + 1) % @wide
 		x = (x==0) ? @wide : x
 		return x
 	end
 
-	def get_y(num)
-		return @high - (num) / @wide
+	def get_y(str_pos)
+		# get the actual y coordinate for a given string position
+		return @high - (str_pos) / @wide
 	end
 
-	def left(num)
-		return coordinate(get_x(num)-1,get_y(num))
+	def left(str_pos)
+		return coordinate(get_x(str_pos)-1,get_y(str_pos))
 	end
 
-	def right(num)
-		return coordinate(get_x(num)+1,get_y(num))
+	def right(str_pos)
+		return coordinate(get_x(str_pos)+1,get_y(str_pos))
 	end
 
-	def up(num)
-		return coordinate(get_x(num),get_y(num)+1)
+	def up(str_pos)
+		return coordinate(get_x(str_pos),get_y(str_pos)+1)
 	end
 
-	def down(num)
-		return coordinate(get_x(num),get_y(num)-1)
+	def down(str_pos)
+		return coordinate(get_x(str_pos),get_y(str_pos)-1)
 	end
 
-	def set(char, val)
-		@binary[char] = val
+	def set(str_pos, val)
+		# assign a value to a string position
+		@binary[str_pos] = val
 	end
 
-	def get(char)
-		return @binary[char].to_s
+	def get(str_pos)
+		return @binary[str_pos].to_s
 	end
 	
 	def print(input=@binary)
@@ -103,8 +114,9 @@ class Maze
 		return visual
 	end
 
-	def is_wall(cell)
-		return get_x(cell)==1 || get_x(cell)==@wide || get_y(cell)==1 || get_y(cell)==@high  
+	def is_wall(str_pos)
+		# check if the 
+		return get_x(str_pos)==1 || get_x(str_pos)==@wide || get_y(str_pos)==1 || get_y(str_pos)==@high  
 	end
 
 	def redesign
@@ -125,7 +137,9 @@ puts
 maze = Maze.new(30,10)
 maze.redesign
 maze.print(maze.visualize)
-
+s = Solver.new(maze)
+s.trace(1,1,30,10)
+s.print
 
 
 
