@@ -88,18 +88,20 @@ class Maze
 			else
 				horiz = get(left(char)).to_i + get(right(char)).to_i
 				vert = get(up(char)).to_i + get(down(char)).to_i
-				if horiz+vert >= 4
+				if (horiz+vert >= 4 || (!is_wall(char) && (horiz >= 1 && vert >= 1)))
 					visual[char] = "+"
-				elsif  (vert == 2 && horiz == 0) || get_x(char) == 1 || get_x(char)== @wide
-					visual[char] = "|"
-				elsif (horiz == 2 && vert == 0) || get_y(char) == 1 || get_y(char)== @high
+				elsif horiz >= 2 || vert == 0
 					visual[char] = "-"
 				else
-					visual[char] = "+"
+					visual[char] = "|"
 				end
 			end
 		end
 		return visual
+	end
+
+	def is_wall(cell)
+		return get_x(cell)==1 || get_x(cell)==@wide || get_y(cell)==1 || get_y(cell)==@high  
 	end
 
 end
