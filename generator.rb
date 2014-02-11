@@ -15,7 +15,6 @@ class Generator
 
 		generate_blank
 		generate_recursive(str_pos)
-
 		return @maze
 
 	end
@@ -33,7 +32,8 @@ class Generator
 				dirs << uuddllrr.index(next_str_pos)
 			end
 		end
-		return if done
+
+		return false if done
 
 		@maze.set(@maze.udlr(str_pos)[direction = dirs.sample],"0")
 		if !generate_recursive(uuddllrr[direction])

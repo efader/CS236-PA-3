@@ -5,7 +5,7 @@ class Solver
 	end
 
 	def solve(x1,y1,x2,y2)
-		return !!trace(x1,x2,y1,y2)
+		return !trace(x1,x2,y1,y2).nil?
 	end
 
 	def trace(start_x,start_y,finish_x,finish_y)
@@ -23,11 +23,9 @@ class Solver
 	end
 
 	def trace_recursive(str_pos, finish)
-		path = str_pos.to_s
-		if str_pos == finish
-			# this triggers all traces along the correct path to return strings instead of nil
-			return path
-		end
+		# this triggers all traces along the correct path to return strings instead of nil
+		return str_pos.to_s if str_pos == finish
+
 		@map.set(str_pos,"X")
 
 		udlr = @map.udlr(str_pos)
@@ -35,10 +33,7 @@ class Solver
 		udlr.each do |next_str_pos|
 			if @map.get(next_str_pos) == "0"
 				next_path = trace_recursive(next_str_pos,finish)
-				if !next_path.nil?
-					# if a path is returning a string instead of nil, return an appended string
-					return path + " " + next_path
-				end
+				return str_pos.to_s + " " + next_path unless next_path.nil?
 			end
 		end
 		return nil		
