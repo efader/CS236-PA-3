@@ -1,5 +1,3 @@
-require_relative "maze"
-
 class Solver
 	def initialize(maze=Maze.new(1,1,"1"))
 		@maze = maze
@@ -68,10 +66,3 @@ class Solver
 		return visual
 	end
 end
-
-maze = Maze.new(4,4,111111111100010001111010101100010101101110101100000101111011101100000101111111111)
-maze.print(maze.visualize)
-solver = Solver.new(maze)
-puts solver.solve(4,1,1,4)
-maze.print(solver.visual_solution)
-puts solver.solution

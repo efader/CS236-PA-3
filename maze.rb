@@ -1,3 +1,6 @@
+require_relative "solver"
+require_relative "generator"
+
 class Maze
 	# mazes are defined by their width and height
 	# this describes a square of spaces that are all open
@@ -107,11 +110,13 @@ class Maze
 end
 
 #maze = Maze.new(4,4,111111111100010001111010101100010101101110101100000101111011101100000101111111111)
-#maze.generate
+#puts
 #maze.print
-#puts ""
+#puts
 #maze.print(maze.visualize)
-#puts ""
+#gen = Generator.new(20,8)
+#maze = gen.generate()
+#maze.print(maze.visualize)
 
 
 

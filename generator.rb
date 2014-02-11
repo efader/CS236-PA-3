@@ -1,5 +1,3 @@
-require_relative "maze"
-
 class Generator
 
 	def initialize(wide,high)
@@ -8,9 +6,10 @@ class Generator
 		@maze = Maze.new(wide,high)
 	end
 
-	def generate(start_x,start_y,finish_x,finish_y)
-		start = @maze.coordinate(start_x*2,start_y*2)
-		finish = @maze.coordinate(finish_x*2,finish_y*2)
+	def generate()
+		w = (@wide - 1) / 2
+		h = (@high - 1) / 2
+		finish = @maze.coordinate(rand(1..w)*2,rand(1..h)*2)
 		generate_blank
 
 		generate_recursive(finish)
@@ -60,8 +59,3 @@ class Generator
 
 
 end
-
-gen = Generator.new(20,8)
-puts
-maze = gen.generate(20,1,1,8)
-maze.print(maze.visualize)
