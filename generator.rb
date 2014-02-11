@@ -7,6 +7,7 @@ class Generator
 	end
 
 	def generate()
+		# initialize a blank maze and call a recursive function to construct paths
 		w = (@wide - 1) / 2
 		h = (@high - 1) / 2
 		finish = @maze.coordinate(rand(1..w)*2,rand(1..h)*2)
@@ -25,19 +26,23 @@ class Generator
 
 		done = true
 		uuddllrr.each do |box|
+			# make sure there is one valid path from current cell
 			done = done && @maze.get(box) != "X"
-			#puts box.to_s + " (" + (@maze.get_x(box) / 2).to_s + "," + (@maze.get_y(box)/2).to_s + ")"
 		end
 
 		if done
+			# when there are no valid directions left for paths, pass false
 			return false
 		end
 
 		while @maze.get(uuddllrr[num=rand(0..3)]) != "X"
+			# randomly select a valid direction for a path
 		end
 
 		@maze.set(udlr[num],"0")
 		if !generate_recursive(uuddllrr[num])
+			# when a recursive call has passed false, a path is created
+			# then it calls itself to create a second path
 			generate_recursive(cell)
 		end
 

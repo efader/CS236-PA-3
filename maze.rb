@@ -107,16 +107,24 @@ class Maze
 		return get_x(cell)==1 || get_x(cell)==@wide || get_y(cell)==1 || get_y(cell)==@high  
 	end
 
+	def redesign
+		g = Generator.new(width,height)
+		@binary = g.generate.value
+	end
+
 end
 
-#maze = Maze.new(4,4,111111111100010001111010101100010101101110101100000101111011101100000101111111111)
-#puts
-#maze.print
-#puts
-#maze.print(maze.visualize)
-#gen = Generator.new(20,8)
-#maze = gen.generate()
-#maze.print(maze.visualize)
+maze = Maze.new(4,4,111111111100010001111010101100010101101110101100000101111011101100000101111111111)
+
+maze.print(maze.visualize)
+gen = Generator.new(4,4)
+puts
+maze.redesign
+maze.print(maze.visualize)
+puts
+maze = Maze.new(30,10)
+maze.redesign
+maze.print(maze.visualize)
 
 
 
